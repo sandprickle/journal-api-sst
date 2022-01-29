@@ -10,7 +10,9 @@
     "remove": "sst remove"
   },
   "eslintConfig": {
-    "extends": ["serverless-stack"]
+    "extends": [
+      "serverless-stack"
+    ]
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
@@ -18,8 +20,8 @@
     "@types/node": "<15.0.0"
   },
   "dependencies": {
-    "@serverless-stack/cli": "0.60.6",
-    "@serverless-stack/resources": "0.60.6",
+    "@serverless-stack/cli": "^0.60.8",
+    "@serverless-stack/resources": "^0.60.8",
     "aws-cdk-lib": "2.7.0"
   }
 }
