@@ -1,0 +1,14 @@
+import { Template } from 'aws-cdk-lib/assertions'
+import * as sst from '@serverless-stack/resources'
+import ApiStack from '../stacks/ApiStack'
+import StorageStack from '../stacks/StorageStack'
+
+test('Api Stack', () => {
+  const app = new sst.App()
+
+  const storageStack = new StorageStack(app, 'test-storage-stack')
+  const apiStack = new ApiStack(app, 'test-api-stack', storageStack.table)
+
+  const template = Template.fromStack(apiStack)
+  template.resourceCountIs('AWS::ApiGateway::RestApi', 1)
+})
