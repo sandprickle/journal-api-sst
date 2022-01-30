@@ -1,33 +1,32 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb'
-import { HttpMessage } from '@aws-sdk/types'
+import dynamoDb from './util/dynamodb'
+import { HttpRequest, HttpResponse } from '@aws-sdk/types'
+import httpResponse from './util/http-response'
+import * as yup from 'yup'
 
-const ddbDocClient = DynamoDBDocumentClient.from(new DynamoDBClient({}))
+const journalEntrySchema = yup
+  .object({
+    journalId: yup.string().defined().min(3),
+    timestamp: yup.number().defined().required().integer(),
+    content: yup.string().defined().required(),
+  })
+  .noUnknown()
 
-export async function main(event: HttpMessage) {
-  const data = JSON.parse(event.body)
+export async function main(event: HttpRequest): Promise<HttpResponse> {
+  const requestBody = JSON.parse(event.body)
 
-  const params = {
-    TableName: process.env.TABLE_NAME,
-    Item: {
-      journalId: data.journalId,
-      timestamp: data.timestamp,
-      content: data.content,
-    },
-  }
+  const dataIsInvalid = !journalEntrySchema.isValidSync(requestBody, {
+    strict: true,
+  })
+  if (dataIsInvalid) return httpResponse(400, 'Invalid body')
 
   try {
-    await ddbDocClient.send(new PutCommand(params))
-    return {
-      statusCode: 200,
-      body: JSON.stringify(params.Item),
-    }
-  } catch (err: any) {
-    console.error(err)
+    await dynamoDb.put({
+      TableName: process.env.TABLE_NAME,
+      Item: requestBody,
+    })
 
-    return {
-      statuscode: 500,
-      body: JSON.stringify(err.message),
-    }
+    return httpResponse(200, JSON.stringify(requestBody))
+  } catch (err: any) {
+    return httpResponse(500, JSON.stringify(err.message))
   }
 }

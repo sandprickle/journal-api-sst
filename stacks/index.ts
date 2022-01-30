@@ -8,5 +8,5 @@ export default function main(app: sst.App): void {
   })
 
   const storageStack = new StorageStack(app, 'storage')
-  const appStack = new ApiStack(app, 'api', storageStack.table)
+  new ApiStack(app, 'api', storageStack.table)
 }
