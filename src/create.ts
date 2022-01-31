@@ -1,5 +1,5 @@
 import dynamoDb from './util/dynamodb'
-import { HttpRequest, HttpResponse } from '@aws-sdk/types'
+import { HttpResponse } from '@aws-sdk/types'
 import httpResponse from './util/http-response'
 import * as yup from 'yup'
 
@@ -11,7 +11,7 @@ const journalEntrySchema = yup
   })
   .noUnknown()
 
-export async function main(event: HttpRequest): Promise<HttpResponse> {
+export async function main(event: any): Promise<HttpResponse> {
   const requestBody = JSON.parse(event.body)
 
   const dataIsInvalid = !journalEntrySchema.isValidSync(requestBody, {

@@ -7,6 +7,7 @@ export default function httpResponse(
   return {
     headers: {
       accept: 'application/json',
+      'Content-Type': 'application/json',
     },
     statusCode,
     body,
