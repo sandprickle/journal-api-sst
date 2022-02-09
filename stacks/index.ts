@@ -8,5 +8,6 @@ export default function main(app: sst.App): void {
   })
 
   const storageStack = new StorageStack(app, 'storage')
+
   new ApiStack(app, 'api', storageStack.table)
 }
