@@ -20,8 +20,8 @@
     "@types/node": "<15.0.0"
   },
   "dependencies": {
-    "@serverless-stack/cli": "^0.60.8",
-    "@serverless-stack/resources": "^0.60.8",
+    "@serverless-stack/cli": "^1.18.4",
+    "@serverless-stack/resources": "^1.18.4",
     "aws-cdk-lib": "2.7.0",
     "trim-newlines": ">=3.0.1",
     "yup": "^0.32.11"
